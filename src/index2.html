@@ -8,9 +8,63 @@
     
     <title>Document</title>
 </head>
-<body>
-    <header></header>
-    <main></main>
-    <footer></footer>
+<body class="max-w-6xl m-auto">
+    <header class="flex flex-row justify-between items-center border-b-2 border-orange-400 h-[30%] bg-blue-500">
+         <section class="flex justify-center items-center">
+            <div class="w-full"><img src="92FB2B59-D222-42F5-83A2-8D2699971682.PNG" alt="logo" class="lg:w-50 lg:h-40 w-50 h-30"><h1></h1></div>
+            <div class=" w-full relative lg:-left-10 -left-7 -bottom-7 font-bold lg:text-6xl text-4xl"><h1>CHAT<x class="text-white">...</x></h1></div>
+        </section>
+        <section class="flex-1 lg:flex flex-row justify-end items-center pr-2.5 gap-7 hover:cursor-pointer hidden">
+            <a href="" class="hover:bg-orange-400 font-bold hover:rounded-md hover:p-2.5 transition-all text-white"><span>Documentation</span></a>
+            <a href="" class="hover:bg-orange-400 font-bold hover:rounded-md hover:p-2.5 transition-all text-white"><span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-house-icon lucide-house"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></span></a>
+            <a href="" class="hover:bg-orange-400 font-bold hover:rounded-md hover:p-2.5 transition-all text-white"><span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chromium-icon lucide-chromium"><path d="M10.88 21.94 15.46 14"/><path d="M21.17 8H12"/><path d="M3.95 6.06 8.54 14"/><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/></svg></span></a>
+            <a href="" class="hover:bg-orange-400 font-bold hover:rounded-md hover:p-2.5 transition-all text-white"><span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-twitter-icon lucide-twitter"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg></span></a>
+            <a href="" class="hover:bg-orange-400 font-bold hover:rounded-md hover:p-2.5 transition-all text-white"><span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-linkedin-icon lucide-linkedin"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg></span></a>
+            <a href="" class="hover:bg-orange-400 font-bold hover:rounded-md hover:p-2.5 transition-all text-white"><span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shield-question-mark-icon lucide-shield-question-mark"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="M9.1 9a3 3 0 0 1 5.82 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg></span></a>
+        </section>
+    </header>
+    <main class="flex-1 flex flex-col justify-center items-center pt-4">
+        <section class="flex flex-col gap-5 w-full lg:px-0 px-2.5">
+            <div>
+                <h1 class="lg:text-4xl text-3xl font-bold text-center">Create an account</h1>
+            </div>
+            <div class="flex flex-1 bg-slate-50">
+                <form action="" class="flex flex-col gap-5 lg:w-[50%] w-full m-auto">
+                    <div class="flex flex-col gap-1.5">
+                        <label for="" class="font-bold">Your Name</label>
+                        <input type="text" placeholder="Name" required class=" bg-white border p-2 focus:border-orange-600 rounded-md outline-none transition-all w-[90%]">
+                    </div>
+                    <div class="flex flex-col gap-1.5">
+                        <label for="" class="font-bold">Date of Birth</label>
+                        <input type="date" placeholder="Date de Naissance" required class=" bg-white border p-2 focus:border-orange-600 rounded-md outline-none transition-all w-[90%]">
+                    </div>
+                    <div class="flex flex-col gap-1.5">
+                        <label for="" class="font-bold">E-mail</label>
+                        <input type="email" placeholder="email" required class=" bg-white border p-2 focus:border-orange-600 rounded-md outline-none transition-all w-[90%]">
+                    </div>
+                    <div class="flex flex-col gap-1.5">
+                        <label for="" class="font-bold">Number</label>
+                        <input type="number" placeholder="Number" required class=" bg-white border p-2 focus:border-orange-600 rounded-md outline-none transition-all w-[90%]">
+                    </div>
+                    <div class="flex flex-col gap-1.5">
+                        <label for="" class="font-bold">PassWord</label>
+                        <input type="password" placeholder="PassWord" required class=" bg-white border p-2 focus:border-orange-600 rounded-md outline-none transition-all w-[90%]">
+                    </div>
+                    <div class="flex flex-col gap-1.5">
+                        <label for="" class="font-bold">Re-enter your password</label>
+                        <input type="password" placeholder="PassWord" required class=" bg-white border p-2 focus:border-orange-600 rounded-md outline-none transition-all w-[90%]">
+                    </div>
+                    <div class="flex flex-1 justify-center">
+                        <button type="submit" class="cursor-pointer text-center rounded-md bg-green-600 p-2 w-[80%] mr-10 font-bold text-white">Sign Up</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </main>
+    <footer class="h-[10vh] bg-orange-100 mt-5">
+        <p class="text-center">
+            <span class="text-blue-500 font-bold">CHAT...</span>, tous drots reservés @2025
+        </p>
+    </footer>
 </body>
 </html>
