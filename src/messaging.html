@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="./output.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+    <title>Messagerie - CHAT...</title>
+    <style>
+        body { font-family: 'Poppins', sans-serif; }
+        .chat-container { display: flex; height: 100vh; }
+        .sidebar { background:#075E54; color:#fff; width:30%; max-width:360px; display:flex; flex-direction:column; }
+        .chat-area { flex:1; display:flex; flex-direction:column; background:#fff; }
+        .conversation-list { flex:1; overflow-y:auto; border-right:1px solid #ddd; }
+        .conversation-item { padding:12px 16px; border-bottom:1px solid #f0f0f0; cursor:pointer; transition:all 0.2s; display:flex; gap:12px; align-items:center; }
+        .conversation-item:hover { background:#f5f5f5; }
+        .conversation-item.active { background:#e8f5e9; }
+        .avatar { width:48px; height:48px; border-radius:50%; background:#60a5fa; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:bold; flex-shrink:0; }
+        .conv-meta { flex:1; min-width:0; }
+        .conv-name { font-weight:600; margin-bottom:4px; }
+        .conv-preview { font-size:13px; color:#666; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+        .conv-time { font-size:12px; color:#999; margin-top:4px; }
+        .chat-header { padding:16px; background:#075E54; color:#fff; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #ddd; }
+        .chat-title { display:flex; gap:12px; align-items:center; flex:1; }
+        .chat-body { flex:1; overflow-y:auto; padding:16px; display:flex; flex-direction:column; gap:8px; background:#f5f5f5; }
+        .message { display:flex; margin-bottom:8px; }
+        .message.own { justify-content:flex-end; }
+        .message-bubble { max-width:70%; padding:10px 14px; border-radius:8px; word-wrap:break-word; font-size:14px; }
+        .message.own .message-bubble { background:#075E54; color:#fff; border-bottom-right-radius:2px; }
+        .message.other .message-bubble { background:#e0e0e0; color:#333; border-bottom-left-radius:2px; }
+        .message-time { font-size:11px; color:#999; margin-top:2px; }
+        .chat-input { padding:12px 16px; border-top:1px solid #ddd; display:flex; gap:8px; align-items:flex-end; }
+        .input-field { flex:1; padding:10px 12px; border:1px solid #ddd; border-radius:20px; font-family:inherit; font-size:14px; }
+        .btn-send { background:#075E54; color:#fff; border:none; width:36px; height:36px; border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+        .btn-send:hover { background:#054d41; }
+        .search-box { padding:12px 16px; border-bottom:1px solid #ddd; }
+        .search-input { width:100%; padding:8px 12px; border:1px solid #ddd; border-radius:20px; font-family:inherit; font-size:13px; }
+        .empty-chat { flex:1; display:flex; align-items:center; justify-content:center; color:#999; }
+
+        /* Responsive */
+        @media(max-width:768px) {
+            .chat-container { flex-direction:column; }
+            .sidebar { width:100%; max-width:100%; }
+            .conversation-list { max-height:300px; }
+            .message-bubble { max-width:85%; }
+            .chat-header { padding:12px; }
+        }
+    </style>
+</head>
+<body class="m-0 p-0">
+    <div class="chat-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="search-box">
+                <input type="text" id="searchInput" class="search-input" placeholder="Rechercher...">
+            </div>
+            <div class="conversation-list" id="conversationList">
+                <!-- Conversations injected by JS -->
+            </div>
+        </div>
+
+        <!-- Chat area -->
+        <div class="chat-area">
+            <div id="chatHeader" class="chat-header" style="display:none;">
+                <div class="chat-title">
+                    <div class="avatar" style="width:40px;height:40px;font-size:16px;" id="headerAvatar">A</div>
+                    <div id="headerName" style="font-weight:600;">Sélectionnez une conversation</div>
+                </div>
+                <div style="display:flex;gap:12px;cursor:pointer;">
+                    <span>📞</span>
+                    <span>⋮</span>
+                </div>
+            </div>
+
+            <div class="empty-chat" id="emptyState">
+                <div style="text-align:center;">
+                    <div style="font-size:48px;margin-bottom:16px;">💬</div>
+                    <div style="font-size:16px;font-weight:600;color:#333;">Sélectionnez une conversation</div>
+                </div>
+            </div>
+
+            <div class="chat-body" id="chatBody" style="display:none;"></div>
+
+            <div class="chat-input" id="chatInput" style="display:none;">
+                <input type="text" id="messageInput" class="input-field" placeholder="Entrez un message...">
+                <button class="btn-send" onclick="sendMessage()">➤</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample conversations data
+        const conversations = [
+            {
+                id: 1,
+                name: 'Avril Martin',
+                avatar: 'AM',
+                lastMessage: 'Oui, c\'est d\'accord pour demain',
+                time: '14:35',
+                messages: [
+                    { own: false, text: 'Salut! Comment ça va?', time: '14:20' },
+                    { own: true, text: 'Ça va bien et toi?', time: '14:21' },
+                    { own: false, text: 'Nickel! Tu es libre demain?', time: '14:30' },
+                    { own: true, text: 'Oui, à quelle heure?', time: '14:32' },
+                    { own: false, text: 'Oui, c\'est d\'accord pour demain', time: '14:35' }
+                ]
+            },
+            {
+                id: 2,
+                name: 'leo.ducharme',
+                avatar: 'LD',
+                lastMessage: 'Merci pour ton aide!',
+                time: '10:15',
+                messages: [
+                    { own: false, text: 'Salut léo', time: '09:50' },
+                    { own: true, text: 'Coucou!', time: '09:55' },
+                    { own: false, text: 'J\'ai une question...', time: '10:05' },
+                    { own: true, text: 'Je t\'écoute', time: '10:10' },
+                    { own: false, text: 'Merci pour ton aide!', time: '10:15' }
+                ]
+            },
+            {
+                id: 3,
+                name: 'Mary89',
+                avatar: 'M8',
+                lastMessage: 'À bientôt!',
+                time: 'Hier',
+                messages: [
+                    { own: false, text: 'Salut Mary!', time: '16:40' },
+                    { own: true, text: 'Coucou!', time: '16:45' },
+                    { own: false, text: 'À bientôt!', time: '16:50' }
+                ]
+            },
+            {
+                id: 4,
+                name: 'Thomas_R',
+                avatar: 'TR',
+                lastMessage: 'D\'accord, on se voit demain',
+                time: 'Hier',
+                messages: [
+                    { own: false, text: 'Salut Thomas', time: '15:20' },
+                    { own: true, text: 'Salut!', time: '15:25' },
+                    { own: false, text: 'D\'accord, on se voit demain', time: '15:30' }
+                ]
+            }
+        ];
+
+        let currentConversation = null;
+
+        // Render conversations list
+        function renderConversations() {
+            const list = document.getElementById('conversationList');
+            list.innerHTML = conversations.map(conv => `
+                <div class="conversation-item ${currentConversation?.id === conv.id ? 'active' : ''}" onclick="selectConversation(${conv.id})">
+                    <div class="avatar">${conv.avatar}</div>
+                    <div class="conv-meta">
+                        <div class="conv-name">${conv.name}</div>
+                        <div class="conv-preview">${conv.lastMessage}</div>
+                    </div>
+                    <div class="conv-time">${conv.time}</div>
+                </div>
+            `).join('');
+        }
+
+        // Select conversation
+        function selectConversation(id) {
+            currentConversation = conversations.find(c => c.id === id);
+            renderConversations();
+            renderChat();
+        }
+
+        // Render chat messages
+        function renderChat() {
+            const header = document.getElementById('chatHeader');
+            const empty = document.getElementById('emptyState');
+            const body = document.getElementById('chatBody');
+            const input = document.getElementById('chatInput');
+
+            if (!currentConversation) {
+                header.style.display = 'none';
+                empty.style.display = 'flex';
+                body.style.display = 'none';
+                input.style.display = 'none';
+                return;
+            }
+
+            // Update header
+            document.getElementById('headerAvatar').textContent = currentConversation.avatar;
+            document.getElementById('headerName').textContent = currentConversation.name;
+            header.style.display = 'flex';
+            empty.style.display = 'none';
+            body.style.display = 'flex';
+            input.style.display = 'flex';
+
+            // Render messages
+            body.innerHTML = currentConversation.messages.map(msg => `
+                <div class="message ${msg.own ? 'own' : 'other'}">
+                    <div>
+                        <div class="message-bubble">${msg.text}</div>
+                        <div class="message-time">${msg.time}</div>
+                    </div>
+                </div>
+            `).join('');
+
+            // Scroll to bottom
+            body.scrollTop = body.scrollHeight;
+        }
+
+        // Send message
+        function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const text = input.value.trim();
+            if (!text || !currentConversation) return;
+
+            const now = new Date();
+            const time = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+            currentConversation.messages.push({ own: true, text, time });
+            currentConversation.lastMessage = text;
+            currentConversation.time = time;
+
+            input.value = '';
+            renderChat();
+            renderConversations();
+        }
+
+        // Search
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+            const list = document.getElementById('conversationList');
+            list.innerHTML = conversations
+                .filter(c => c.name.toLowerCase().includes(query))
+                .map(conv => `
+                    <div class="conversation-item ${currentConversation?.id === conv.id ? 'active' : ''}" onclick="selectConversation(${conv.id})">
+                        <div class="avatar">${conv.avatar}</div>
+                        <div class="conv-meta">
+                            <div class="conv-name">${conv.name}</div>
+                            <div class="conv-preview">${conv.lastMessage}</div>
+                        </div>
+                        <div class="conv-time">${conv.time}</div>
+                    </div>
+                `).join('');
+        });
+
+        // Allow Enter to send message
+        document.getElementById('messageInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+
+        // Initial render
+        renderConversations();
+    </script>
+</body>
+</html>
